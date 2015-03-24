@@ -5,7 +5,6 @@
 
 #include "sort.h"
 
-const int ser_n = 1<<14;
 unsigned int seed;
 
 void qSort_helper(dataType *data, int n)    {
@@ -20,18 +19,16 @@ void qSort_helper(dataType *data, int n)    {
     data[i] = data[0];
     data[0] = tmp;
 
-    long long pivot = (long long)data[0].key;
+    long long pivot = data[0].key;
     i = 1; j = n-1;
     while(i <= j)   {
         tmp = data[i];
         data[i] = data[j];
         data[j] = tmp;
 
-        while(i <= j &&
-            (long long)data[i].key <= pivot)
+        while(i <= j && data[i].key <= pivot)
                 i++;
-        while(i <= j &&
-            pivot < (long long)data[j].key)
+        while(i <= j && pivot < data[j].key)
                 j--;
         // printf("%d %d\n", i, j);
     }
@@ -43,17 +40,15 @@ void qSort_helper(dataType *data, int n)    {
     data[0] = data[j];
     data[j] = tmp;
 
-    #pragma omp task if(j > ser_n) untied
     qSort_helper(data, j);
 
-    #pragma omp task if(n-i > ser_n) untied
     qSort_helper(data+i, n-i);
 }
 
 void qSort(dataType *data, int n)   {
     #pragma omp parallel firstprivate(data, n) private(seed)
     {
-        srand(time(NULL) ^ omp_get_thread_num());
+        srand(time(NULL)); //^ omp_get_thread_num());
         seed = rand();
         #pragma omp master
         {

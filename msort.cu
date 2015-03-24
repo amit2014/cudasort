@@ -5,27 +5,28 @@
 #include <cuda_runtime_api.h>
 
 #include "sort.h"
+#include "common.h"
 
-const int ser_n = 1<<9;
-
-__device__ void merge(dataType *data, int n1, int n2, dataType *res) {
-    // printf("Thread %d doing merge.\n", omp_get_thread_num());
-    int i = 0, j = n1, k = 0;
-
-    while(i < n1 && j < n2)
-        if((long long)data[i].key < (long long)data[j].key)
-            res[k++] = data[i++];
-        else
-            res[k++] = data[j++];
+__device__ void mSort_helper(dataType *data, int n, dataType *res)   {
+    // printf("Thread %d\n", omp_get_thread_num());
+    if(n == 1)  {
+        res[0] = data[0];
+        return;
+    }
+    if(n <= 0) {
+        return;
+    }
     
-    while(i < n1)
-        res[k++] = data[i++];
-    while(j < n2)
-        res[k++] = data[j++];
+    mSort_helper(res, n/2, data);
+ 
+    mSort_helper(res+n/2, n-n/2, data+n/2);
+
+    merge(data, n/2, n, res);
 }
 
 __global__ void mSortKernel(dataType *data, int n, dataType *res)  {
-    
+    bottomUpMergeSort(data, n, res);
+    // mSort_helper(res, n, data);
 }
 
 void mSort(dataType *data, int n)    {
@@ -36,9 +37,10 @@ void mSort(dataType *data, int n)    {
     cudaMemcpy(buf1, data, n*sizeof(dataType), cudaMemcpyHostToDevice);
     cudaMemcpy(buf2, data, n*sizeof(dataType), cudaMemcpyHostToDevice);
     //printf("%d threads\n", omp_get_num_threads());
-    mSortKernel <<< 2,2 >>> (buf1, n, buf2);
+    mSortKernel <<< 1,2 >>> (buf1, n, buf2);
 
-    cudaMemcpy(data, buf2, n*sizeof(dataType), cudaMemcpyDeviceToHost);
+    cudaMemcpy(data, buf1, n*sizeof(dataType), cudaMemcpyDeviceToHost);
     cudaFree(buf1);
     cudaFree(buf2);
 }
+

@@ -1,5 +1,5 @@
-CC  = nvcc
-CXX = nvcc
+CC  = nvcc -arch=compute_35 -code=sm_35 -rdc=true
+CXX = $(CC)
 
 CXXFLAGS = -Xcompiler " -Wall -fopenmp"
 LIBFLAGS = -Xcompiler " -fPIC"
@@ -7,10 +7,10 @@ LIBFLAGS = -Xcompiler " -fPIC"
 LFLAGS = -L.
 LIBS = -lpsort
 
-SRCS = check.cpp time.cpp
+SRCS = check.cu time.cu
 LIBSRCS = rsort.cu qsort.cu msort.cu sort.cu common.cu
 
-OBJS = $(SRCS:.cpp=.o)
+OBJS = $(SRCS:.cu=.o)
 LIBOBJS = $(LIBSRCS:.cu=.o)
 
 LIBRARY = libpsort.so
@@ -28,7 +28,7 @@ profiler: LFLAGS += -L/usr/local/lib
 profiler: LIBS += -lprofiler
 profiler: debug
 
-$(TEST): %: %.cpp
+$(TEST): %: %.cu
 	$(CXX) $(CXXFLAGS) -o $@ $< $(LFLAGS) $(LIBS)
 
 $(LIBOBJS): %.o: %.cu
@@ -46,6 +46,6 @@ check.o: common.h sort.h payloadsize.h
 time.o: common.h sort.h payloadsize.h
 rsort.o: sort.h payloadsize.h common.h
 qsort.o: sort.h payloadsize.h
-msort.o: sort.h payloadsize.h
+msort.o: sort.h payloadsize.h common.h
 sort.o: sort.h payloadsize.h common.h
 common.o: common.h sort.h payloadsize.h

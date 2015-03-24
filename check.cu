@@ -5,7 +5,7 @@ using namespace std;
 #include "common.h"
 
 int main()  {
-    const int n = 1<<17;
+    const int n = 17;
     int i;
     bool failed = false;
     dataType *data = new dataType[n];
@@ -18,18 +18,18 @@ int main()  {
             unsigned int seed = rand();
             #pragma omp for
             for(i = 0; i < n; ++i)  {
-                data[i].key = (long long *)randull(&seed);
+                data[i].key = (long long)randull(&seed);
             }
         }
         failed = false;
 
         set<long long> ints;
         for(i = 0; i < n; ++i)
-            ints.insert((long long)data[i].key);
+            ints.insert(data[i].key);
         
         pSort(data, n, MERGE);
         for(i = 0; i < n-1; ++i)
-            if((long long)data[i].key > (long long)data[i+1].key) {
+            if(data[i].key > data[i+1].key) {
                 printf("(Unordered) ");
                 failed = true;
                 break;
@@ -38,7 +38,7 @@ int main()  {
         if(!failed) {
             set<long long> rets;
             for(i = 0; i < n; ++i)  {
-                rets.insert((long long)data[i].key);
+                rets.insert(data[i].key);
             }
 
             vector<long long> v;
@@ -56,7 +56,7 @@ int main()  {
             printf("Sort failed!\n");
             #ifdef DEBUG
             for(i = 0; i < n; ++i)
-                printf("%lld\n", (long long)data[i].key);
+                printf("%lld\n", data[i].key);
             #endif
             return -1;
         }

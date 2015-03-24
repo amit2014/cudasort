@@ -21,7 +21,7 @@ int main() {
     printf("  Shared Mem per Block (KB): %.2f\n", prop.sharedMemPerBlock/1024.0);
     printf("  Warp Size: %d\n", prop.warpSize);
     printf("  Max threads per block: %d\n", prop.maxThreadsPerBlock);
-    printf("  Cuda version: %d.%d\n", prop.major, prop.minor);
+    printf("  Compute capability: %d.%d\n", prop.major, prop.minor);
     printf("  MultiProcessor count: %d\n", prop.multiProcessorCount);
     printf("  L2 Cache Size (KB): %.2f\n", prop.l2CacheSize/1024.0);
     printf("  Max Threads per MultiProcessor: %d\n\n", prop.maxThreadsPerMultiProcessor);

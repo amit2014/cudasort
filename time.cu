@@ -18,7 +18,7 @@ int main()  {
         unsigned int seed = rand();
         #pragma omp for
         for(i = 0; i < n; ++i)  {
-            data[i].key = (long long *)randull(&seed);
+            data[i].key = (long long)randull(&seed);
         }
     }
 
@@ -35,7 +35,7 @@ int main()  {
       ProfilerStop();
     #endif
     for(i = 0; i < n-1; ++i)
-        if((long long)data[i].key > (long long)data[i+1].key) {
+        if(data[i].key > (long long)data[i+1].key) {
             printf("Sort failed!\n");
             printf("Time taken: %.2fs\n", end-start);
             return -1;
