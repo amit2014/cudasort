@@ -27,7 +27,7 @@ int main()  {
         for(i = 0; i < n; ++i)
             ints.insert((long long)data[i].key);
         
-        pSort(data, n, BEST);
+        pSort(data, n, MERGE);
         for(i = 0; i < n-1; ++i)
             if((long long)data[i].key > (long long)data[i+1].key) {
                 printf("(Unordered) ");

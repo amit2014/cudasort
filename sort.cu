@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <omp.h>
 using namespace std;
 
 #include "sort.h"

@@ -29,7 +29,7 @@ int main()  {
     #endif
     double start, end;
     start = omp_get_wtime();
-    pSort(data, n, QUICK);
+    pSort(data, n, MERGE);
     end = omp_get_wtime();
     #ifdef gprofiler
       ProfilerStop();

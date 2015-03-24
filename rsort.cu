@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <omp.h>
 
 #include "sort.h"
 #include "common.h"

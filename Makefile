@@ -8,10 +8,10 @@ LFLAGS = -L.
 LIBS = -lpsort
 
 SRCS = check.cpp time.cpp
-LIBSRCS = rsort.cpp qsort.cpp msort.cpp sort.cpp common.cpp
+LIBSRCS = rsort.cu qsort.cu msort.cu sort.cu common.cu
 
 OBJS = $(SRCS:.cpp=.o)
-LIBOBJS = $(LIBSRCS:.cpp=.o)
+LIBOBJS = $(LIBSRCS:.cu=.o)
 
 LIBRARY = libpsort.so
 TEST = check time
@@ -31,7 +31,7 @@ profiler: debug
 $(TEST): %: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $< $(LFLAGS) $(LIBS)
 
-$(LIBOBJS): %.o: %.cpp
+$(LIBOBJS): %.o: %.cu
 	$(CXX) $(CXXFLAGS) $(LIBFLAGS) -c $< -o $@
 
 clean:
