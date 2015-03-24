@@ -1,14 +1,14 @@
-CC  = gcc-4.8
-CXX = g++-4.8
+CC  = nvcc
+CXX = nvcc
 
-CXXFLAGS = -Wall -fopenmp
-LIBFLAGS = -fPIC
+CXXFLAGS = -Xcompiler " -Wall -fopenmp"
+LIBFLAGS = -Xcompiler " -fPIC"
 
 LFLAGS = -L.
 LIBS = -lpsort
 
 SRCS = check.cpp time.cpp
-LIBSRCS = bsort.cpp rsort.cpp qsort.cpp msort.cpp sort.cpp common.cpp
+LIBSRCS = rsort.cpp qsort.cpp msort.cpp sort.cpp common.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 LIBOBJS = $(LIBSRCS:.cpp=.o)
@@ -44,7 +44,6 @@ depend: $(SRCS) $(LIBSRCS)
 
 check.o: common.h sort.h payloadsize.h
 time.o: common.h sort.h payloadsize.h
-bsort.o: sort.h payloadsize.h
 rsort.o: sort.h payloadsize.h common.h
 qsort.o: sort.h payloadsize.h
 msort.o: sort.h payloadsize.h
