@@ -21,7 +21,7 @@ $(LIBRARY): $(LIBOBJS)
 	$(CXX) $(CXXFLAGS) -shared -o $(LIBRARY) $(LIBOBJS)
 
 all: $(LIBRARY) $(TEST)
-debug: CXXFLAGS += -DDEBUG
+debug: CXXFLAGS += -g -DDEBUG
 debug: all
 profiler: CXXFLAGS += -Dgprofiler
 profiler: LFLAGS += -L/usr/local/lib

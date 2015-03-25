@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <queue>
 #include "common.h"
 using namespace std;
@@ -79,7 +80,7 @@ __device__ void bottomUpMergeSort(dataType *data, int n, dataType *res)  {
 
     for(int s = 1; s < n; s*=2) {
         for(int i = 0; i+s < n; i+=2*s)  {
-            merge(data+i, s, min(i+2*s, n), res+i);
+            merge(&(data[i]), s, min(2*s, n-i), &(res[i]));
         }
         // swap the roles of data and res
         tmp = data;

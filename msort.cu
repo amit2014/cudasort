@@ -7,7 +7,7 @@
 #include "sort.h"
 #include "common.h"
 
-__device__ void mSort_helper(dataType *data, int n, dataType *res)   {
+__device__ void serialMSort(dataType *data, int n, dataType *res)   {
     // printf("Thread %d\n", omp_get_thread_num());
     if(n == 1)  {
         res[0] = data[0];
@@ -17,16 +17,16 @@ __device__ void mSort_helper(dataType *data, int n, dataType *res)   {
         return;
     }
     
-    mSort_helper(res, n/2, data);
+    serialMSort(res, n/2, data);
  
-    mSort_helper(res+n/2, n-n/2, data+n/2);
+    serialMSort(res+n/2, n-n/2, data+n/2);
 
     merge(data, n/2, n, res);
 }
 
 __global__ void mSortKernel(dataType *data, int n, dataType *res)  {
     bottomUpMergeSort(data, n, res);
-    // mSort_helper(res, n, data);
+    // serialMSort(res, n, data);
 }
 
 void mSort(dataType *data, int n)    {
