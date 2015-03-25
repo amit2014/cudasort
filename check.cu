@@ -5,7 +5,7 @@ using namespace std;
 #include "common.h"
 
 int main()  {
-    const int n = 17;
+    const int n = 729;
     int i;
     bool failed = false;
     dataType *data = new dataType[n];
@@ -56,7 +56,10 @@ int main()  {
             printf("Sort failed!\n");
             #ifdef DEBUG
             for(i = 0; i < n; ++i)
-                printf("%lld\n", data[i].key);
+                if(i > 0 && data[i].key < data[i-1].key)
+                    printf("%lld <---\n", data[i].key);
+                else
+                    printf("%lld\n", data[i].key);
             #endif
             return -1;
         }
