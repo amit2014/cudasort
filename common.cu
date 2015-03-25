@@ -79,9 +79,17 @@ __device__ void bottomUpMergeSort(dataType *data, int n, dataType *res)  {
     }
 
     for(int s = 1; s < n; s*=2) {
-        for(int i = 0; i+s < n; i+=2*s)  {
+        int i;
+        for(i = 0; i+s < n; i+=2*s)
             merge(&(data[i]), s, min(2*s, n-i), &(res[i]));
+
+        // copy correct elements to res in correct order
+        // for elements which were not touched in this iteration
+        while(i < n)    {
+            res[i] = data[i];
+            i++;
         }
+
         // swap the roles of data and res
         tmp = data;
         data = res;
