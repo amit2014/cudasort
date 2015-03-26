@@ -58,8 +58,9 @@ __global__ void mSortKernel(dataType *data, int n, dataType *res)  {
     int j = segend(gThreadIdx, nthreads, n);
 
     // sort segment in data
-    serialMSort(res+i, j-i, data+i);
-        // bottomUpMergeSort(data, n, res);
+    // serialMSort(res+i, j-i, data+i);
+    bottomUpMergeSort(data+i, j-i, res+i);
+
     
     warpMerge(data, n, res, i, j, gThreadIdx, 1, 32);
     // now we have res[i..j-1] sorted

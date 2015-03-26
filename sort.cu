@@ -11,7 +11,7 @@ void bSort(dataType *data, int n);
 
 void pSort(dataType *data, int ndata, SortType sorter)	{
 	switch(sorter)	{
-		case BEST:  qSort(data, ndata); break;
+		case BEST:  mSort(data, ndata); break;
 		case MERGE: mSort(data, ndata); break;
 		case QUICK: qSort(data, ndata); break;
                 case RADIX: rSort(data, ndata); break;
