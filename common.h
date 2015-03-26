@@ -23,6 +23,9 @@
                 fprintf(stderr, ##__VA_ARGS__);\
         } while (0)
 
+#define segstart(i, nsegs, n) (min(i, nsegs)*((n)/(nsegs)) + min(i, (n) % (nsegs)))
+#define segend(i, nsegs, n)   min(segstart(i+1, nsegs, n), n)
+
 long long randull(unsigned int *seed);
 void psum(int *data, int n, int *data2);
 __device__ void serialHeapSort(dataType* array, int size);
