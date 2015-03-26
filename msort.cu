@@ -67,14 +67,12 @@ __global__ void mSortKernel(dataType *data, int n, dataType *res)  {
     // everyone done with their warp.
     // we have a maximum of 1024 threads per block => max 32 warps per block
     // => 1 warp alone can take charge
-    
-    if(threadIdx.x < 32)   {
+    if(threadIdx.x < blockDim.x/32)   {
         gThreadIdx = blockIdx.x * blockDim.x + threadIdx.x * 32;
         i = segstart(gThreadIdx,  nthreads, n);
         j = segend(gThreadIdx+31, nthreads, n);
-
         int c = warpMerge(res, n, data, i, j, gThreadIdx, 32, blockDim.x);
-        // now we have data[i..j-1] sorted if blockDim was odd power of 2 (c%2==1), res o/w
+        // now we have res[i..j-1] sorted if blockDim is even power of 2 (c%2==0), data o/w
     }
     // done with the block.
 
@@ -94,8 +92,8 @@ __global__ void mSortKernel(dataType *data, int n, dataType *res)  {
             gThreadIdx = threadIdx.x * blockDim.x;
             i = segstart(gThreadIdx, nthreads, n);
             j = segend(gThreadIdx + blockDim.x-1, nthreads, n);
-            int c = warpMerge(data, n, res, i, j, gThreadIdx, blockDim.x, nthreads);
-            // now we have data[i..j-1] sorted if blockDim was even power of 2 (c%2==0), res o/w
+            int c = warpMerge(res, n, data, i, j, gThreadIdx, blockDim.x, nthreads);
+            // now we have data[i..j-1] sorted if blockDim was odd power of 2 (c%2==1), data o/w
         }
     }
 }
@@ -112,9 +110,9 @@ void mSort(dataType *data, int n)    {
     cudaMemcpy(buf2, data, n*sizeof(dataType), cudaMemcpyHostToDevice);
 
     // gridDim <= 32
-    mSortKernel <<< 8, 16*32 >>> (buf1, n, buf2);
+    mSortKernel <<< 4, 16*32 >>> (buf1, n, buf2);
 
-    cudaMemcpy(data, buf1, n*sizeof(dataType), cudaMemcpyDeviceToHost);
+    cudaMemcpy(data, buf2, n*sizeof(dataType), cudaMemcpyDeviceToHost);
     cudaFree(buf1);
     cudaFree(buf2);
 }
