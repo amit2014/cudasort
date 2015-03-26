@@ -8,7 +8,7 @@ using namespace std;
 #include "common.h"
 
 int main()  {
-    const int n = 1<<28;
+    const int n = 1<<23;
     int i;
     dataType *data = new dataType[n];
     

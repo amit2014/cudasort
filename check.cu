@@ -5,13 +5,16 @@ using namespace std;
 #include "common.h"
 
 int main()  {
-    const int n = 729;
+    int lim = 1<<17;
     int i;
     bool failed = false;
-    dataType *data = new dataType[n];
+    dataType *data = new dataType[lim];
+    srand(time(NULL));
 
     for(int k = 0; k < 15; ++k)
     {
+        int n = (rand() % lim) + 1;
+        printf("Sorting n = %d numbers.. \t", n);
         #pragma omp parallel firstprivate(data)
         {
             srand(time(NULL) ^ omp_get_thread_num());
