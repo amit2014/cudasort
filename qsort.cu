@@ -67,16 +67,17 @@ __global__ void qSortKernel(dataType *data, int n, dataType *buf, int *start, in
     curand_init(clock64(), threadIdx.x, 0, &s);
 
     int a = blockDim.x << 1; // must be a power of 2
-    start[0] = 0;
-    end[0] = n;
-    __syncthreads();
+    if(threadIdx.x == 0)    {
+        start[0] = 0;
+        end[0] = n;
+    }
     while((a >>= 1) > 1)    {
         if(threadIdx.x % a == 0)    {
             int left  = start[threadIdx.x],
                 right = end[threadIdx.x];
             if(right - left > 1)   {
-                int i = serialPartition(&s, data + left,
-                                            right-left, buf+left);
+                int i = serialInPlacePartition(&s, data + left,
+                                                    right-left);
                 i += left;
                 end[threadIdx.x + a/2] = right;
                 end[threadIdx.x] = i;
