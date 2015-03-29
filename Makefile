@@ -1,7 +1,7 @@
 CC  = nvcc -arch=compute_35 -code=sm_35 -rdc=true
 CXX = $(CC)
 
-CXXFLAGS = -Xcompiler " -Wall -fopenmp"
+CXXFLAGS = -O3 -Xcompiler " -Wall -fopenmp"
 LIBFLAGS = -Xcompiler " -fPIC"
 
 LFLAGS = -L.
