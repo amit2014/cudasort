@@ -8,7 +8,7 @@ LFLAGS = -L.
 LIBS = -lpsort
 
 SRCS = check.cu time.cu
-LIBSRCS = rsort.cu qsort.cu msort.cu sort.cu common.cu
+LIBSRCS = qsort.cu msort.cu sort.cu common.cu
 
 OBJS = $(SRCS:.cu=.o)
 LIBOBJS = $(LIBSRCS:.cu=.o)
@@ -44,7 +44,6 @@ depend: $(SRCS) $(LIBSRCS)
 
 check.o: common.h sort.h payloadsize.h
 time.o: common.h sort.h payloadsize.h
-rsort.o: sort.h payloadsize.h common.h
 qsort.o: sort.h payloadsize.h
 msort.o: sort.h payloadsize.h common.h
 sort.o: sort.h payloadsize.h common.h
